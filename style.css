@@ -1,0 +1,89 @@
+/* style.css */
+
+/* ========== Variables ========== */
+:root {
+    --primary-color: #ff0000;
+    --background-color: #111111;
+    --accent-color: #330000;
+}
+
+/* ========== Base Styles ========== */
+body {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+/* ========== Title Styles ========== */
+.title {
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 3.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    border-bottom: 3px solid var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+/* ========== Carousel Customization ========== */
+.carousel {
+    max-width: 1200px;
+    margin: 0 auto;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+}
+
+.carousel-item {
+    transition: transform 1s ease-in-out;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(100%) sepia(100%) saturate(10000%) hue-rotate(0deg);
+    width: 3rem;
+    height: 3rem;
+}
+
+/* ========== Image Enhancements ========== */
+.carousel img {
+    border-radius: 8px;
+    max-height: 80vh;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.carousel img:hover {
+    transform: scale(1.02);
+}
+
+/* ========== Artist Bio Section ========== */
+.artist-bio {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: var(--accent-color);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.artist-bio p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5rem;
+        padding: 1rem 0;
+    }
+    
+    .carousel {
+        margin: 0 1rem;
+    }
+}
