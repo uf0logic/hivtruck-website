@@ -8,4 +8,4 @@ A minimalist portfolio website featuring:
 - Bootstrap integration
 
 ## License
-All artwork © [Artist Name]. Website code MIT Licensed.
+All artwork © HIVTRUCK. Website code MIT Licensed.
