@@ -32,33 +32,57 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#2c3e50">
   </head>
 
   <body>
-    <h1 class="title">HIVTRUCK</h1>
+    <div class="aero-wrapper">
+      <div class="container">
+        <h1 class="title">HIVTRUCK</h1>
 
-    <img src="images/art1.jpg" class="d-block w-100" alt="Art Piece 1" />
+        <img src="images/art1.jpg" class="d-block w-100" alt="Art Piece 1" />
 
-    <img src="images/art2.jpg" class="d-block w-100" alt="Art Piece 2" />
+        <!-- Buttons after the carousel -->
+        <div class="action-buttons text-center">
+          <!-- Telegram Button -->
+          <a
+            href="https://t.me/funnyhivtruck"
+            class="btn btn-telegram btn-custom"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i class="fab fa-telegram"></i> See More Works
+          </a>
 
-    <img src="images/art3.jpg" class="d-block w-100" alt="Art Piece 3" />
-
-    <!-- Buttons after the carousel -->
-    <div class="action-buttons text-center">
-      <!-- Telegram Button -->
-      <a
-        href="https://t.me/funnyhivtruck"
-        class="btn btn-telegram btn-custom"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i class="fab fa-telegram"></i> See More Works
-      </a>
-
-      <!-- Email Button -->
-      <a href="mailto:hivtruck@proton.me" class="btn btn-email btn-custom">
-        <i class="fas fa-envelope"></i> Contact Me
-      </a>
+          <!-- Email Button -->
+          <a href="mailto:hivtruck@proton.me" class="btn btn-email btn-custom">
+            <i class="fas fa-envelope"></i> Contact Me
+          </a>
+        </div>
+      </div>
     </div>
+    <script>
+      const img = document.querySelector('img');
+      const container = document.querySelector('.container');
+
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = -((y - centerY) / centerY) * 10;
+        const rotateY = ((x - centerX) / centerX) * 10;
+        
+        img.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+
+      container.addEventListener('mouseleave', () => {
+        img.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+      });
+    </script>
   </body>
 </html>
