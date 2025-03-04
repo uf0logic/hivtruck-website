@@ -16,13 +16,10 @@ body {
     max-width: 800px;
     width: 100%;
     padding: 20px;
-    background: rgba(255, 94, 0, 0.1);
-    backdrop-filter: blur(10px);
+    background: rgb(40, 40, 40);
     border-radius: 30px;
-    border: 1px solid rgba(255, 94, 0, 0.2);
-    box-shadow: 
-        0 8px 32px 0 rgba(255, 94, 0, 0.1),
-        inset 0 0 32px 0 rgba(255, 94, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
     perspective: 1000px;
 }
 
@@ -33,53 +30,95 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
 img {
     width: 100%;
-    max-width: 500px;
-    height: auto;
+    max-width: 400px;
+    aspect-ratio: 1;
+    object-fit: cover;
     border-radius: 22% / 22%;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: linear-gradient(180deg, 
-        rgba(255, 255, 255, 0.15) 0%, 
-        rgba(255, 255, 255, 0.05) 50%,
-        rgba(255, 255, 255, 0.02) 51%,
-        rgba(255, 255, 255, 0.0) 100%);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    background: #fff;
+    position: relative;
     box-shadow: 
-        0 8px 20px rgba(0, 0, 0, 0.3),
-        0 1px 0 rgba(255, 255, 255, 0.4) inset,
-        0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-    transition: transform 0.1s ease;
+        0 8px 24px rgba(0, 0, 0, 0.5),
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
     transform-style: preserve-3d;
+    transform: translateZ(0); /* Reset default transform, remove translateY */
+}
+
+/* Glossy overlay */
+img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 22% / 22%;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.1) 45%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Top shine effect */
+img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 22% / 22%;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 51%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 2;
 }
 
 img:hover {
-    transform: scale(1.02);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+    box-shadow: 
+        0 12px 28px rgba(0, 0, 0, 0.5),
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    /* Remove transform property from here as it's handled by JS */
 }
 
 .action-buttons {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
 .btn-custom {
-    margin: 10px;
-    padding: 15px 30px;
+    width: 90px;
+    height: 90px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 1.2rem;
     transition: all 0.3s ease;
-    border-radius: 25px;
-    border: 1px solid rgba(255, 94, 0, 0.3);
+    border-radius: 22% / 22%;
+    border: 1px solid rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(5px);
     text-decoration: none;
-    width: 80%;
-    max-width: 300px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
     background: linear-gradient(180deg, 
         rgba(255, 255, 255, 0.15) 0%, 
         rgba(255, 255, 255, 0.05) 50%,
@@ -87,8 +126,34 @@ img:hover {
         rgba(255, 255, 255, 0.0) 100%);
 }
 
+/* Clean reflection for buttons */
+.btn-custom::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.4) 0%,
+        transparent 100%
+    );
+    border-radius: 22% 22% 0 0 / 22% 22% 0 0;
+}
+
+.btn-custom i {
+    font-size: 3.5rem;
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+}
+
 .btn-telegram {
-    background: linear-gradient(180deg, #4db2ec 0%, #0088cc 100%);
+    background: linear-gradient(
+        180deg,
+        #4db2ec 0%,
+        #2980b9 100%
+    ) !important;
     color: white;
     box-shadow: 
         0 4px 15px rgba(77, 178, 236, 0.3),
@@ -96,7 +161,11 @@ img:hover {
 }
 
 .btn-email {
-    background: linear-gradient(180deg, #ff7043 0%, #ea4335 100%);
+    background: linear-gradient(
+        180deg,
+        #e74c3c 0%,
+        #c0392b 100%
+    ) !important;
     color: white;
     box-shadow: 
         0 4px 15px rgba(234, 67, 53, 0.3),
@@ -104,6 +173,20 @@ img:hover {
 }
 
 .btn-custom:hover {
-    transform: scale(1.02);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Remove all other glossy overlays and effects */
+.container::before,
+.container::after,
+img::before,
+.btn-custom::before {
+    display: none;
+}
+
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+    filter: drop-shadow(0 8px 24px rgba(var(--dominant-color, 0, 0, 0), 0.4));
 }

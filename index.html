@@ -41,7 +41,9 @@
       <div class="container">
         <h1 class="title">HIVTRUCK</h1>
 
-        <img src="images/art1.jpg" class="d-block w-100" alt="Art Piece 1" />
+        <div class="image-wrapper">
+            <img src="images/art1.jpg" class="d-block w-100" alt="Art Piece 1" />
+        </div>
 
         <!-- Buttons after the carousel -->
         <div class="action-buttons text-center">
@@ -52,12 +54,12 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <i class="fab fa-telegram"></i> See More Works
+            <i class="fab fa-telegram"></i>
           </a>
 
           <!-- Email Button -->
           <a href="mailto:hivtruck@proton.me" class="btn btn-email btn-custom">
-            <i class="fas fa-envelope"></i> Contact Me
+            <i class="fas fa-envelope"></i>
           </a>
         </div>
       </div>
@@ -65,23 +67,100 @@
     <script>
       const img = document.querySelector('img');
       const container = document.querySelector('.container');
+      let currentRotateX = 0;
+      let currentRotateY = 0;
+      let currentScale = 1;
+      let isAnimating = false;
 
       container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const imgRect = img.getBoundingClientRect();
+        const x = e.clientX - imgRect.left;
+        const y = e.clientY - imgRect.top;
         
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+        const buffer = 40;
+        const isInside = x >= buffer && x <= imgRect.width - buffer && 
+                        y >= buffer && y <= imgRect.height - buffer;
         
-        const rotateX = -((y - centerY) / centerY) * 10;
-        const rotateY = ((x - centerX) / centerX) * 10;
+        const centerX = imgRect.width / 2;
+        const centerY = imgRect.height / 2;
         
-        img.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        // Target values
+        const targetRotateX = isInside ? -((y - centerY) / centerY) * 5 : 0;
+        const targetRotateY = isInside ? ((x - centerX) / centerX) * 5 : 0;
+        const targetScale = isInside ? 1.01 : 1;
+        
+        // Smooth interpolation
+        currentRotateX += (targetRotateX - currentRotateX) * 0.1;
+        currentRotateY += (targetRotateY - currentRotateY) * 0.1;
+        currentScale += (targetScale - currentScale) * 0.1;
+        
+        if (!isAnimating) {
+            isAnimating = true;
+            requestAnimationFrame(animate);
+        }
       });
 
+      function animate() {
+        img.style.transform = `
+            perspective(1000px) 
+            rotateX(${currentRotateX}deg) 
+            rotateY(${currentRotateY}deg) 
+            scale3d(${currentScale}, ${currentScale}, ${currentScale})
+        `;
+        
+        // Continue animation if there's still movement
+        if (Math.abs(currentRotateX) > 0.01 || 
+            Math.abs(currentRotateY) > 0.01 || 
+            Math.abs(currentScale - 1) > 0.001) {
+            requestAnimationFrame(animate);
+        } else {
+            isAnimating = false;
+        }
+      }
+
       container.addEventListener('mouseleave', () => {
-        img.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        currentRotateX = 0;
+        currentRotateY = 0;
+        currentScale = 1;
+        if (!isAnimating) {
+            isAnimating = true;
+            requestAnimationFrame(animate);
+        }
+      });
+
+      // Add color detection
+      function getAverageColor(img) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        ctx.drawImage(img, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        
+        let r = 0, g = 0, b = 0, count = 0;
+        
+        for (let i = 0; i < imageData.length; i += 4) {
+            r += imageData[i];
+            g += imageData[i + 1];
+            b += imageData[i + 2];
+            count++;
+        }
+        
+        return {
+            r: Math.round(r/count),
+            g: Math.round(g/count),
+            b: Math.round(b/count)
+        };
+      }
+
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        img.onload = () => {
+            const color = getAverageColor(img);
+            const wrapper = img.closest('.image-wrapper');
+            wrapper.style.setProperty('--dominant-color', `${color.r}, ${color.g}, ${color.b}`);
+        };
       });
     </script>
   </body>
