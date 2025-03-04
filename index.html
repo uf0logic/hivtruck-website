@@ -37,6 +37,11 @@
   </head>
 
   <body>
+    <div class="parallax-container">
+        <div class="parallax-layer layer-skybox"></div>
+        <div class="parallax-layer layer-clouds"></div>
+        <div class="parallax-layer layer-foreground"></div>
+    </div>
     <div class="aero-wrapper">
       <div class="container">
         <h1 class="title">HIVTRUCK</h1>
@@ -65,6 +70,24 @@
       </div>
     </div>
     <script>
+    const parallaxLayers = document.querySelectorAll('.parallax-layer');
+    
+    // Add parallax movement
+    document.addEventListener('mousemove', (e) => {
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
+
+        parallaxLayers.forEach((layer, index) => {
+            const speed = (index + 1) * 20; // Increase effect for each layer
+            const x = (mouseX * speed);
+            const y = (mouseY * speed);
+            
+            requestAnimationFrame(() => {
+                layer.style.transform = `translate(${-x}px, ${-y}px) scale(1.1)`;
+            });
+        });
+    });
+
     const img = document.querySelector('img');
     const container = document.querySelector('.container');
     let currentRotateX = 0;

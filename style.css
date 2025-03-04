@@ -6,9 +6,53 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background: linear-gradient(135deg, #1a0808 0%, #481212 100%);
+    background: #1a0808;
     color: #fff;
     font-family: 'Monomakh', sans-serif;
+    overflow: hidden;
+}
+
+.parallax-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.parallax-layer {
+    position: absolute;
+    top: -5%;  /* Slight overflow to prevent edges showing */
+    left: -5%;
+    width: 110%;  /* Larger than viewport to allow movement */
+    height: 110%;
+    background-position: center;
+    background-size: cover;
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+    image-rendering: crisp-edges;  /* Sharper image rendering */
+}
+
+.layer-skybox {
+    background-image: url('images/background/skybox.png');
+    transform-origin: center;
+    z-index: 1;
+}
+
+.layer-clouds {
+    background-image: url('images/background/clouds.png');
+    z-index: 2;
+    mix-blend-mode: screen;  /* Better blending for clouds */
+}
+
+.layer-foreground {
+    background-image: url('images/background/foreground.png');
+    z-index: 3;
+    top: 40%; /* Move foreground down */
+    height: 70%; /* Adjust height to maintain proportion */
+    background-position: bottom center; /* Align to bottom */
 }
 
 .container {
@@ -16,11 +60,12 @@ body {
     max-width: 800px;
     width: 100%;
     padding: 20px;
-    background: rgb(40, 40, 40);
+    background: rgba(40, 40, 40, 0.8);
     border-radius: 30px;
     border: 1px solid rgba(0, 0, 0, 0.8);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
     perspective: 1000px;
+    backdrop-filter: blur(10px);
 }
 
 .title {
