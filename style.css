@@ -1,82 +1,105 @@
 /* style.css */
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     margin: 0;
+    padding: 0;
+    min-height: 100vh;
     background: #1a0808;
     color: #fff;
     font-family: 'Segoe UI', 'Segoe UI Light', sans-serif;
     overflow: hidden;
+    position: relative;
 }
 
+/* Add parallax container and layers with dynamic scaling */
 .parallax-container {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
+    width: 110%;
+    height: 110vh;
     overflow: hidden;
 }
 
 .parallax-layer {
     position: absolute;
-    top: -5%;  /* Slight overflow to prevent edges showing */
-    left: -5%;
-    width: 110%;  /* Larger than viewport to allow movement */
-    height: 110%;
-    background-position: center;
-    background-size: cover;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     will-change: transform;
-    transition: transform 0.1s ease-out;
-    image-rendering: crisp-edges;  /* Sharper image rendering */
 }
 
 .layer-skybox {
-    background-image: url('images/background/skybox.png');
-    transform-origin: center;
+    min-width: 100%;
+    min-height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: url('images/background/skybox.png') center center;
+    background-size: cover;
     z-index: 1;
 }
 
-/* Remove .layer-clouds completely */
-
 .layer-foreground {
-    background-image: url('images/background/foreground.png');
-    z-index: 2;
-    top: auto;
-    bottom: -5%;
-    left: -5%;
-    width: 110%;
-    height: 65vh;
+    min-width: 100%;
+    min-height: 100%;
     background-size: cover;
-    background-position: bottom center;
+    background-position: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70vh;
+    background: url('images/background/foreground.png') bottom center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    z-index: 2;
     transform-origin: bottom center;
 }
 
+@media (min-aspect-ratio: 16/9) {
+    .layer-foreground {
+        width: 120%;
+        left: -10%;
+        background-size: cover;
+    }
+}
+
+/* Remove .parallax-container and .parallax-layer classes */
+
 .container {
     text-align: center;
-    max-width: 800px;
+    max-width: 450px; /* Even thinner */
     width: 100%;
-    padding: 20px;
-    background: rgba(28, 151, 234, 0.15);  /* Windows Aero blue tint */
+    padding: 12px; /* Reduced padding further */
+    margin-bottom: 0; /* Remove bottom margin */
+    background: rgba(15, 23, 42, 0.75);  /* Darker base color */
     border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.3),
-        inset 0 2px 1px rgba(255, 255, 255, 0.4),
+        0 15px 35px rgba(0, 0, 0, 0.4),
+        inset 0 2px 1px rgba(255, 255, 255, 0.2),
         inset 0 -2px 1px rgba(255, 255, 255, 0.1);
     perspective: 1000px;
-    backdrop-filter: blur(15px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(180%);
     background: linear-gradient(
         180deg,
-        rgba(255, 255, 255, 0.25) 0%,
-        rgba(28, 151, 234, 0.15) 50%,
-        rgba(28, 151, 234, 0.1) 51%,
-        rgba(28, 151, 234, 0.15) 100%
+        rgba(28, 151, 234, 0.08) 0%,
+        rgba(15, 23, 42, 0.85) 30%,
+        rgba(15, 23, 42, 0.9) 70%,
+        rgba(28, 151, 234, 0.08) 100%
     );
+    pointer-events: all; /* Re-enable pointer events for the container */
+    position: absolute;
+    left: calc(50% - 350px); /* Shift left from center */
+    z-index: 2; /* Ensure it's above secondary */
+    height: fit-content; /* Allow natural height */
+    /* Keep your existing container styles */
 }
 
 /* Add inner glow effect */
@@ -86,19 +109,41 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 50%;
+    height: 60%;
     background: linear-gradient(
         180deg,
-        rgba(255, 255, 255, 0.4) 0%,
-        rgba(255, 255, 255, 0.1) 100%
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.03) 100%
     );
     border-radius: 30px 30px 100px 100px;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* Add an extra shine effect */
+.container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 15%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.1) 85%,
+        transparent 100%
+    );
+    border-radius: 30px 30px 0 0;
+    opacity: 0.5;
     pointer-events: none;
 }
 
 .title {
-    padding: 20px;
-    font-size: 3.5em;
+    padding: 10px; /* Reduced padding */
+    font-size: 2.8em; /* Slightly smaller */
     font-weight: 300; /* Light weight for Aero aesthetic */
     letter-spacing: 1px;
     background: linear-gradient(180deg, 
@@ -114,6 +159,58 @@ body {
         0 8px 24px rgba(0, 0, 0, 0.5),
         0 4px 8px rgba(0, 0, 0, 0.3);
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.secondary-container {
+    text-align: left;
+    max-width: 600px; /* Wider than primary */
+    width: 800px; /* Fixed width */
+    height: auto; /* Match primary container height */
+    min-height: fit-content; /* Ensure it's at least as tall as content */
+    padding: 12px;
+    margin: 0;
+    position: relative;
+    opacity: 0.85; /* Slightly more transparent */
+    z-index: 1; /* Place under primary container */
+    background: rgba(15, 23, 42, 0.75);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.4),
+        inset 0 2px 1px rgba(255, 255, 255, 0.2),
+        inset 0 -2px 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px) saturate(180%); /* Slightly less blur than primary */
+    background: linear-gradient(
+        180deg,
+        rgba(28, 151, 234, 0.08) 0%,
+        rgba(15, 23, 42, 0.85) 30%,
+        rgba(15, 23, 42, 0.9) 70%,
+        rgba(28, 151, 234, 0.08) 100%
+    );
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    align-self: center;
+}
+
+/* Custom scrollbar for webkit browsers */
+.secondary-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.secondary-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.secondary-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.secondary-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 img {
@@ -181,7 +278,7 @@ img:hover {
     flex-direction: row;
     justify-content: center;
     gap: 30px;
-    margin: 40px auto;
+    margin: 20px auto; /* Reduced margin */
     padding: 0 20px;
 }
 
@@ -278,3 +375,36 @@ img::before,
     background: rgba(28, 151, 234, 0.3);
     color: white;
 }
+
+.aero-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    pointer-events: none; /* This allows clicks to pass through to parallax layers */
+}
+
+/* Adjust layout for smaller screens */
+@media (max-width: 1200px) {
+    .aero-wrapper {
+        flex-direction: column;
+    }
+    
+    .container {
+        position: relative;
+        left: auto;
+        margin-bottom: 20px;
+    }
+    
+    .secondary-container {
+        width: 90%;
+        max-width: 600px;
+    }
+}
+
+/* ...rest of existing code... */
