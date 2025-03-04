@@ -34,12 +34,16 @@
     />
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#2c3e50">
+
+    <!-- Add after existing meta tags -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400&display=swap" rel="stylesheet">
   </head>
 
   <body>
     <div class="parallax-container">
         <div class="parallax-layer layer-skybox"></div>
-        <div class="parallax-layer layer-clouds"></div>
         <div class="parallax-layer layer-foreground"></div>
     </div>
     <div class="aero-wrapper">
@@ -71,6 +75,24 @@
     </div>
     <script>
     const parallaxLayers = document.querySelectorAll('.parallax-layer');
+    const foregroundLayer = document.querySelector('.layer-foreground');
+    
+    function adjustForegroundPosition() {
+        const vh = window.innerHeight;
+        const containerHeight = document.querySelector('.container').offsetHeight;
+        const minSpace = containerHeight + 50; // minimum space needed for container + padding
+        const availableSpace = vh - minSpace;
+        
+        if (availableSpace < foregroundLayer.offsetHeight) {
+            const newTop = Math.max(60, 100 - (foregroundLayer.offsetHeight / vh * 100));
+            foregroundLayer.style.top = `${newTop}vh`;
+        } else {
+            foregroundLayer.style.top = '60vh';
+        }
+    }
+
+    window.addEventListener('resize', adjustForegroundPosition);
+    window.addEventListener('load', adjustForegroundPosition);
     
     // Add parallax movement
     document.addEventListener('mousemove', (e) => {
