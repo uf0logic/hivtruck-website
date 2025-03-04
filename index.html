@@ -65,14 +65,15 @@
       </div>
     </div>
     <script>
-      const img = document.querySelector('img');
-      const container = document.querySelector('.container');
-      let currentRotateX = 0;
-      let currentRotateY = 0;
-      let currentScale = 1;
-      let isAnimating = false;
+    const img = document.querySelector('img');
+    const container = document.querySelector('.container');
+    let currentRotateX = 0;
+    let currentRotateY = 0;
+    let currentScale = 1;
+    let isAnimating = false;
 
-      container.addEventListener('mousemove', (e) => {
+    // Image animation
+    container.addEventListener('mousemove', (e) => {
         const imgRect = img.getBoundingClientRect();
         const x = e.clientX - imgRect.left;
         const y = e.clientY - imgRect.top;
@@ -84,23 +85,26 @@
         const centerX = imgRect.width / 2;
         const centerY = imgRect.height / 2;
         
-        // Target values
-        const targetRotateX = isInside ? -((y - centerY) / centerY) * 5 : 0;
-        const targetRotateY = isInside ? ((x - centerX) / centerX) * 5 : 0;
-        const targetScale = isInside ? 1.01 : 1;
-        
-        // Smooth interpolation
-        currentRotateX += (targetRotateX - currentRotateX) * 0.1;
-        currentRotateY += (targetRotateY - currentRotateY) * 0.1;
-        currentScale += (targetScale - currentScale) * 0.1;
+        if (isInside) {
+            const targetRotateX = -((y - centerY) / centerY) * 5;
+            const targetRotateY = ((x - centerX) / centerX) * 5;
+            
+            currentRotateX += (targetRotateX - currentRotateX) * 0.1;
+            currentRotateY += (targetRotateY - currentRotateY) * 0.1;
+            currentScale += (1.01 - currentScale) * 0.1;
+        } else {
+            currentRotateX *= 0.9;
+            currentRotateY *= 0.9;
+            currentScale += (1 - currentScale) * 0.1;
+        }
         
         if (!isAnimating) {
             isAnimating = true;
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateImage);
         }
-      });
+    });
 
-      function animate() {
+    function animateImage() {
         img.style.transform = `
             perspective(1000px) 
             rotateX(${currentRotateX}deg) 
@@ -108,28 +112,83 @@
             scale3d(${currentScale}, ${currentScale}, ${currentScale})
         `;
         
-        // Continue animation if there's still movement
         if (Math.abs(currentRotateX) > 0.01 || 
             Math.abs(currentRotateY) > 0.01 || 
             Math.abs(currentScale - 1) > 0.001) {
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateImage);
         } else {
             isAnimating = false;
         }
-      }
+    }
 
-      container.addEventListener('mouseleave', () => {
-        currentRotateX = 0;
-        currentRotateY = 0;
-        currentScale = 1;
-        if (!isAnimating) {
-            isAnimating = true;
-            requestAnimationFrame(animate);
-        }
-      });
+    // Button animations
+    const buttons = document.querySelectorAll('.btn-custom');
+    
+    buttons.forEach(btn => {
+        let btnRotateX = 0;
+        let btnRotateY = 0;
+        let btnScale = 1;
+        let btnAnimating = false;
 
-      // Add color detection
-      function getAverageColor(img) {
+        container.addEventListener('mousemove', (e) => {
+            const btnRect = btn.getBoundingClientRect();
+            const x = e.clientX - btnRect.left;
+            const y = e.clientY - btnRect.top;
+            
+            // Calculate proportional buffer (40px for 400px image = 10% of size)
+            const buffer = btnRect.width * 0.1; // 10% of button width
+            const isInside = x >= buffer && x <= btnRect.width - buffer && 
+                           y >= buffer && y <= btnRect.height - buffer;
+            
+            const centerX = btnRect.width / 2;
+            const centerY = btnRect.height / 2;
+            
+            if (isInside) {
+                const rotateX = -((y - centerY) / centerY) * 15;
+                const rotateY = ((x - centerX) / centerX) * 15;
+                
+                btnRotateX += (rotateX - btnRotateX) * 0.2;
+                btnRotateY += (rotateY - btnRotateY) * 0.2;
+                btnScale += (1.05 - btnScale) * 0.15;
+            } else {
+                btnRotateX *= 0.85;
+                btnRotateY *= 0.85;
+                btnScale += (1 - btnScale) * 0.15;
+            }
+            
+            if (!btnAnimating) {
+                btnAnimating = true;
+                animateButton();
+            }
+
+            function animateButton() {
+                btn.style.transform = `
+                    perspective(1000px) 
+                    rotateX(${btnRotateX}deg) 
+                    rotateY(${btnRotateY}deg) 
+                    scale3d(${btnScale}, ${btnScale}, ${btnScale})
+                `;
+                
+                if (Math.abs(btnRotateX) > 0.01 || 
+                    Math.abs(btnRotateY) > 0.01 || 
+                    Math.abs(btnScale - 1) > 0.001) {
+                    requestAnimationFrame(animateButton);
+                } else {
+                    btnAnimating = false;
+                }
+            }
+        });
+
+        container.addEventListener('mouseleave', () => {
+            btnRotateX = 0;
+            btnRotateY = 0;
+            btnScale = 1;
+            btn.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+    });
+
+    // Add color detection
+    function getAverageColor(img) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = img.width;
