@@ -102,9 +102,7 @@
     </div>
     <script>
       const imageList = [
-        'images/art1.jpg',
-        'images/art2.jpg',
-        'images/art3.jpg'
+        'images/art1.jpg'
       ];
       let currentImageIndex = 0;
 
@@ -313,20 +311,7 @@
 
       const mainImage = document.querySelector('.image-wrapper img');
       mainImage.addEventListener('click', () => {
-          
-          isAnimating = true;
-          currentScale = 0.8; // Shrink
-          
-          setTimeout(() => {
-              currentImageIndex = (currentImageIndex + 1) % imageList.length;
-              mainImage.src = imageList[currentImageIndex];
-              currentScale = 1.1; // Slightly larger than normal
-              
-              setTimeout(() => {
-                  currentScale = 1; // Back to normal size
-                  isAnimating = false;
-              }, 150);
-          }, 150);
+          openViewer(currentImageIndex);
       });
 
       // Remove the duplicate DOMContentLoaded event listeners and replace with this single version
@@ -339,7 +324,7 @@
         const nextBtn = viewer.querySelector('.next-btn');
         const mainImage = document.querySelector('.image-wrapper img');
         const imageCount = 25;
-        const startIndex = 4;
+        const startIndex = 2;  // Changed from 4 to 2 to include art2.jpg and art3.jpg
         let currentViewerIndex = 0;
         let gridImages = [];
         let msnry;
@@ -439,10 +424,21 @@
                 currentViewerIndex = (currentViewerIndex + direction + gridImages.length) % gridImages.length;
                 viewerImg.src = gridImages[currentViewerIndex];
                 
-                // Update main image if we're viewing one of the carousel images
-                if (currentViewerIndex < imageList.length) {
+                // Update main image if we're viewing the first image
+                if (currentViewerIndex === 0) {
                     currentImageIndex = currentViewerIndex;
                     mainImage.src = imageList[currentImageIndex];
+                    // Update color detection for main image
+                    const wrapper = mainImage.closest(".image-wrapper");
+                    const img = new Image();
+                    img.onload = () => {
+                        const color = getAverageColor(img);
+                        wrapper.style.setProperty(
+                            "--dominant-color",
+                            `${color.r}, ${color.g}, ${color.b}`
+                        );
+                    };
+                    img.src = mainImage.src;
                 }
                 
                 requestAnimationFrame(() => {
