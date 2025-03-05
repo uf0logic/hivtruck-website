@@ -371,12 +371,18 @@
                     itemSelector: '.grid-item',
                     columnWidth: '.grid-sizer',
                     percentPosition: true,
-                    gutter: 20, // Increased gutter spacing
+                    gutter: 20,
+                    fitWidth: true, // Enable fitWidth for center alignment
                     transitionDuration: '0.3s'
                 });
 
-                // Relayout Masonry periodically to handle any layout issues
-                setTimeout(() => msnry.layout(), 1000);
+                // Initial layout
+                msnry.layout();
+                
+                // Additional layout after a short delay to ensure proper positioning
+                setTimeout(() => {
+                    msnry.layout();
+                }, 1000);
             });
         }
 

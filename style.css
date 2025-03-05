@@ -192,6 +192,10 @@ body {
     overflow-y: auto; /* Enable vertical scrolling */
     height: 100%; /* Take full height */
     max-height: 700px; /* Match container height */
+    padding: 0; /* Remove default padding */
+    display: flex;
+    justify-content: center; /* Center the grid */
+    align-items: flex-start;
 }
 
 @media (max-width: 1200px) {
@@ -517,22 +521,23 @@ img::before,
 }
 
 .grid-gallery {
-    width: 100%;
+    width: calc(100% - 40px); /* Account for padding */
     margin: 0 auto;
-    padding-right: 10px; /* Add space for scrollbar */
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .grid-sizer,
 .grid-item {
-    width: calc(33.333% - 20px); /* Increased gap between items */
+    width: calc(33.333% - 13.333px); /* Adjust for exact thirds with gutters */
 }
 
 .grid-item {
     margin-bottom: 20px; /* Increased bottom margin */
-    overflow: hidden;
-    border-radius: 12px; /* Softer corners */
-    transform: scale(0.95); /* Shrink items slightly */
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: visible;
+    position: relative;
+    z-index: 1;
+    float: left; /* Ensure proper float layout */
 }
 
 .grid-item img {
