@@ -106,6 +106,13 @@
       </div>
     </div>
     <script>
+      const imageList = [
+        'images/art1.jpg',
+        'images/art2.jpg',
+        'images/art3.jpg'
+      ];
+      let currentImageIndex = 0;
+
       const parallaxLayers = document.querySelectorAll('.parallax-layer');
     
       document.addEventListener('mousemove', (e) => {
@@ -307,6 +314,24 @@
             `${color.r}, ${color.g}, ${color.b}`
           );
         };
+      });
+
+      const mainImage = document.querySelector('.image-wrapper img');
+      mainImage.addEventListener('click', () => {
+          
+          isAnimating = true;
+          currentScale = 0.8; // Shrink
+          
+          setTimeout(() => {
+              currentImageIndex = (currentImageIndex + 1) % imageList.length;
+              mainImage.src = imageList[currentImageIndex];
+              currentScale = 1.1; // Slightly larger than normal
+              
+              setTimeout(() => {
+                  currentScale = 1; // Back to normal size
+                  isAnimating = false;
+              }, 150);
+          }, 150);
       });
     </script>
   </body>
