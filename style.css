@@ -521,19 +521,19 @@ img::before,
 }
 
 .grid-gallery {
-    width: calc(100% - 40px); /* Account for padding */
+    width: calc(100% - 60px); /* Increased padding space */
     margin: 0 auto;
-    padding: 20px;
+    padding: 30px; /* Increased padding */
     box-sizing: border-box;
 }
 
 .grid-sizer,
 .grid-item {
-    width: calc(33.333% - 13.333px); /* Adjust for exact thirds with gutters */
+    width: calc(33.333% - 26.666px); /* Adjusted for wider gutters */
 }
 
 .grid-item {
-    margin-bottom: 20px; /* Increased bottom margin */
+    margin-bottom: 20px; /* Increased vertical spacing */
     overflow: visible;
     position: relative;
     z-index: 1;
@@ -544,7 +544,7 @@ img::before,
     width: 100%;
     height: auto; /* Let height adjust naturally */
     display: block;
-    border-radius: 12px;
+    border-radius: 32px;
     border: 1px solid rgba(0, 0, 0, 0.8);
     background: #fff;
     box-shadow: 
