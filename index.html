@@ -324,101 +324,75 @@
           }, 150);
       });
 
-      // Add fullscreen viewer functionality
+      // Remove the duplicate DOMContentLoaded event listeners and replace with this single version
       document.addEventListener('DOMContentLoaded', () => {
+        const gallery = document.querySelector('.grid-gallery');
         const viewer = document.querySelector('.fullscreen-viewer');
-        const viewerImg = viewer.querySelector('img');
+        const viewerImg = viewer.querySelector('.viewer-content img');
         const closeBtn = viewer.querySelector('.close-viewer');
         const prevBtn = viewer.querySelector('.prev-btn');
         const nextBtn = viewer.querySelector('.next-btn');
-        const gridItems = document.querySelectorAll('.grid-item img');
+        const mainImage = document.querySelector('.image-wrapper img');
+        const imageCount = 25;
+        const startIndex = 4;
         let currentViewerIndex = 0;
+        let gridImages = [];
 
-        // Convert grid items to array for easy navigation
-        const gridImages = Array.from(gridItems).map(img => img.src);
+        // Add main carousel images to gridImages
+        imageList.forEach(img => gridImages.push(img));
 
-        // Open viewer
-        gridItems.forEach((img, index) => {
-            img.addEventListener('click', () => {
-                currentViewerIndex = index;
-                viewerImg.src = img.src;
-                viewer.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-        });
-
-        // Close viewer
-        closeBtn.addEventListener('click', () => {
-            viewer.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-
-        // Navigate images
-        prevBtn.addEventListener('click', () => {
-            currentViewerIndex = (currentViewerIndex - 1 + gridImages.length) % gridImages.length;
-            viewerImg.src = gridImages[currentViewerIndex];
-        });
-
-        nextBtn.addEventListener('click', () => {
-            currentViewerIndex = (currentViewerIndex + 1) % gridImages.length;
-            viewerImg.src = gridImages[currentViewerIndex];
-        });
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (!viewer.classList.contains('active')) return;
+        // Function to create and append grid items
+        function createGridItem(index) {
+            const gridItem = document.createElement('div');
+            gridItem.className = 'grid-item';
             
-            if (e.key === 'Escape') {
-                viewer.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            if (e.key === 'ArrowLeft') prevBtn.click();
-            if (e.key === 'ArrowRight') nextBtn.click();
-        });
-      });
+            const img = document.createElement('img');
+            img.src = `images/art${index}.jpg`;
+            img.alt = `Art ${index}`;
+            img.loading = 'lazy';
+            
+            gridItem.appendChild(img);
+            gallery.appendChild(gridItem);
+            gridImages.push(img.src);
 
-      // Update the viewer functionality
-      document.addEventListener('DOMContentLoaded', () => {
-        const viewer = document.querySelector('.fullscreen-viewer');
-        const viewerImg = viewer.querySelector('img');
-        const closeBtn = viewer.querySelector('.close-viewer');
-        const prevBtn = viewer.querySelector('.prev-btn');
-        const nextBtn = viewer.querySelector('.next-btn');
-        const gridItems = document.querySelectorAll('.grid-item img');
-        let currentViewerIndex = 0;
-
-        const gridImages = Array.from(gridItems).map(img => img.src);
-
-        // Open viewer with animation
-        gridItems.forEach((img, index) => {
-            img.addEventListener('click', () => {
-                currentViewerIndex = index;
-                viewer.style.display = 'flex';
-                viewerImg.src = img.src;
-                
-                // Trigger animation
-                requestAnimationFrame(() => {
-                    viewer.classList.add('active');
-                });
-                
-                document.body.style.overflow = 'hidden';
+            // Add click handler to each grid item
+            gridItem.addEventListener('click', () => {
+                openViewer(gridImages.indexOf(img.src));
             });
+        }
+
+        // Create grid items
+        for (let i = startIndex; i <= imageCount; i++) {
+            createGridItem(i);
+        }
+
+        // Function to open viewer
+        function openViewer(index) {
+            currentViewerIndex = index;
+            viewer.style.display = 'flex';
+            viewerImg.src = gridImages[currentViewerIndex];
+            
+            requestAnimationFrame(() => {
+                viewer.classList.add('active');
+            });
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Add click handler for main image
+        mainImage.addEventListener('click', () => {
+            openViewer(currentImageIndex);
         });
 
-        // Close viewer with animation
-        closeBtn.addEventListener('click', closeViewer);
-
+        // Function to close viewer
         function closeViewer() {
             viewer.classList.remove('active');
-            
-            // Wait for animation to complete before hiding
             setTimeout(() => {
                 viewer.style.display = 'none';
                 document.body.style.overflow = '';
-            }, 300); // Match the transition duration
+            }, 300);
         }
 
-        // Update navigation to handle animations
+        // Function to navigate images
         function navigateImages(direction) {
             viewerImg.style.opacity = '0';
             viewerImg.style.transform = 'scale(0.95)';
@@ -427,6 +401,12 @@
                 currentViewerIndex = (currentViewerIndex + direction + gridImages.length) % gridImages.length;
                 viewerImg.src = gridImages[currentViewerIndex];
                 
+                // Update main image if we're viewing one of the carousel images
+                if (currentViewerIndex < imageList.length) {
+                    currentImageIndex = currentViewerIndex;
+                    mainImage.src = imageList[currentImageIndex];
+                }
+                
                 requestAnimationFrame(() => {
                     viewerImg.style.opacity = '1';
                     viewerImg.style.transform = 'scale(1)';
@@ -434,42 +414,33 @@
             }, 150);
         }
 
+        // Event listeners
+        closeBtn.addEventListener('click', closeViewer);
         prevBtn.addEventListener('click', () => navigateImages(-1));
         nextBtn.addEventListener('click', () => navigateImages(1));
 
-        // Update keyboard navigation
+        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (!viewer.classList.contains('active')) return;
             
-            if (e.key === 'Escape') closeViewer();
-            if (e.key === 'ArrowLeft') navigateImages(-1);
-            if (e.key === 'ArrowRight') navigateImages(1);
+            switch(e.key) {
+                case 'Escape':
+                    closeViewer();
+                    break;
+                case 'ArrowLeft':
+                    navigateImages(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateImages(1);
+                    break;
+            }
         });
-    });
 
-    // Add this after the existing code
-    document.addEventListener('DOMContentLoaded', () => {
-        const gallery = document.querySelector('.grid-gallery');
-        const imageCount = 25; // Total number of art images
-        const startIndex = 4; // Starting from art4.jpg
-    
-        // Generate grid items
-        for (let i = startIndex; i <= imageCount; i++) {
-            const gridItem = document.createElement('div');
-            gridItem.className = 'grid-item';
-            
-            const img = document.createElement('img');
-            img.src = `images/art${i}.jpg`;
-            img.alt = `Art ${i}`;
-            img.loading = 'lazy'; // Enable lazy loading for better performance
-            
-            gridItem.appendChild(img);
-            gallery.appendChild(gridItem);
-        }
-    
-        // Update the gridImages array for the viewer
-        const gridItems = document.querySelectorAll('.grid-item img');
-        const gridImages = Array.from(gridItems).map(img => img.src);
+        // Handle image load errors
+        viewerImg.addEventListener('error', () => {
+            console.error('Failed to load image:', viewerImg.src);
+            closeViewer();
+        });
     });
     </script>
   </body>
