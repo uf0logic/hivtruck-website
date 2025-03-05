@@ -1,6 +1,6 @@
 # HIVTRUCK Artist Portfolio
 
-Hosted at hivtruck.ufologic.keenetic.pro
+Hosted at [hivtruck.ufologic.keenetic.pro](https://hivtruck.ufologic.keenetic.pro)
 
 A minimalist portfolio website featuring:
 - Responsive carousel
