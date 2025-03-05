@@ -164,8 +164,8 @@ body {
         rgba(28, 151, 234, 0.08) 100%
     );
     overflow: hidden; /* Changed from overflow: visible */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
     align-self: center;
     flex-grow: 1;
     width: auto;
@@ -197,6 +197,32 @@ body {
     justify-content: center; /* Center the grid */
     align-items: flex-start;
 }
+
+/* Hide webkit scrollbar */
+.secondary-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Remove or comment out the existing webkit scrollbar styles */
+/*
+.secondary-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.secondary-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.secondary-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.secondary-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+*/
 
 @media (max-width: 1200px) {
     .container, .secondary-container {
@@ -320,21 +346,7 @@ body {
 
 /* Custom scrollbar for webkit browsers */
 .secondary-container::-webkit-scrollbar {
-    width: 6px;
-}
-
-.secondary-container::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-}
-
-.secondary-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-}
-
-.secondary-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    display: none;
 }
 
 img {
