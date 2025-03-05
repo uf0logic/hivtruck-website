@@ -524,13 +524,15 @@ img::before,
 
 .grid-sizer,
 .grid-item {
-    width: calc(33.333% - 10px);
+    width: calc(33.333% - 20px); /* Increased gap between items */
 }
 
 .grid-item {
-    margin-bottom: 10px;
+    margin-bottom: 20px; /* Increased bottom margin */
     overflow: hidden;
     border-radius: 12px; /* Softer corners */
+    transform: scale(0.95); /* Shrink items slightly */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .grid-item img {
@@ -552,7 +554,7 @@ img::before,
 @media screen and (max-width: 1024px) {
     .grid-sizer,
     .grid-item {
-        width: calc(50% - 10px);
+        width: calc(50% - 20px);
     }
 }
 
@@ -577,6 +579,7 @@ img::before,
 
 .grid-item:hover {
     z-index: 2;
+    transform: scale(1.0); /* Scale back to original size on hover */
 }
 
 .grid-item:hover img {
