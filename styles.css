@@ -1,74 +1,46 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-/* force scrollbar */
-html {
-  overflow-y: scroll;
-}
+html { overflow-y: scroll; }
 
-body {
-  font-family: sans-serif;
-}
-
-/* ---- grid ---- */
+body { font-family: sans-serif; }
 
 .grid {
   background: #c2c2c2;
-  margin: 0 10px;
+  margin: -20px;
+  border-radius: 15px;
+  /* padding: 20px; */
 }
 
-/* clear fix */
 .grid:after {
   content: "";
   display: block;
   clear: both;
 }
 
-/* ---- .grid-item ---- */
 .grid-sizer,
 .grid-item {
-  width: calc((100% - 20px) / 3);
-  /* 3 columns with 2 gutters between */
-}
-
-.grid-item--width2 {
-  width: calc((100% - 20px) / 3 * 2 + 10px);
-  /* Exactly 2 columns + 1 gutter */
-}
-
-@media screen and (min-width: 768px) {
-
-  .grid-sizer,
-  .grid-item {
-    width: calc((100% - 40px) / 5);
-    /* 5 columns with 4 gutters between */
-  }
-
-  .grid-item--width2 {
-    width: calc((100% - 40px) / 5 * 2 + 10px);
-    /* Exactly 2 columns + 1 gutter */
-  }
+  width: calc((100% - 20px) / 2);
+  float: left;
 }
 
 .grid-item {
-  float: left;
   margin-bottom: 10px;
-  /* aspect-ratio: 3/4; */
-  /* or 4/3, 1/1, etc. depending on your preferred look */
+  margin-top: 10px;
   overflow: hidden;
 }
 
 .grid-item img {
   display: block;
   width: 100%;
-  height: auto; /* Let height adjust automatically */
+  height: auto;
   max-width: 100%;
-  /* object-fit: cover; */
-  /* This will crop the image while maintaining its aspect ratio */
+  border-radius: 15px;
+  cursor: pointer;
 }
 
-.grid-item--width2 img {
-  width: 100%;
-  height: auto;
+@media screen and (min-width: 768px) {
+  .grid-sizer,
+  .grid-item {
+    width: calc((100% - 60px) / 4);
+  }
 }
