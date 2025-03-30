@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const msnry = new Masonry(grid, {
     itemSelector: ".grid-item",
     columnWidth: ".grid-sizer",
-    // gutter: 20,
+    gutter: 20,
     percentPosition: true,
     horizontalOrder: false,
     transitionDuration: '0.6s',
