@@ -16,6 +16,9 @@ header {
   position: relative;
   margin-bottom: 1em;
   cursor: pointer;
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0 cover 40%;
   transition: all 0.5s ease;
 }
 
@@ -80,4 +83,16 @@ header {
 }
 .boosty {
   background: linear-gradient(145deg, #9146ff, #772ce8);
+}
+
+
+@keyframes appear{
+  from{
+    opacity: 0;
+    scale: 0.5;
+  }
+  to{
+    opacity: 1;
+    scale: 1;
+  }
 }
